@@ -36,7 +36,7 @@ while not done:
     screen.blit(label, (10, 10))
     dY = dY * 0.98
     dY = dY + dYchange
-
+    # add ing this to github hopefully
     circleY = circleY + dY
     circleX = circleX + dX
     if circleY + dY > 500 or circleY < 0:
