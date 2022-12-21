@@ -1,5 +1,30 @@
 import pygame
-# https://colab.research.google.com/drive/1OsMLEiYVjp33UbcxWRDMvi7p_cLXYqoS?usp=sharing
+
+class Ball:
+	def __init__(self, x ,y , radius):
+		self.x = x
+		self.y = y
+		self.dX = 5
+		self.dY = 10
+		self.dYchange = 0.5  # this was controlled by the up an down arrows
+		self.radius = radius
+
+	def move(self):
+		self.dY = self.dY * 0.98
+		self.dY = self.dY + self.dYchange
+
+		self.x = self.x + self.dX
+		self.y = self.y + self.dY
+		if self.y > 500 or self.y < 0:
+			self.dY = -self.dY
+
+		if self.x > 500 or self.x < 0:
+			self.dX = -self.dX
+	def draw(self):
+		pygame.draw.circle(screen, (255, 255, 0), [self.x, self.y], self.radius)
+
+ball = Ball(0,0,12)
+
 
 pygame.init()
 RED = (255,0,0)
@@ -8,44 +33,29 @@ pygame.display.set_caption("Bouncing Ball?")
 clock = pygame.time.Clock()
 
 done = False
-circleX = 250
-circleY = 0
-dX = 5
-dY = 10
-dYchange = 0.5 #this is controlled by the up an down arrows
-# initialize font; must be called after 'pygame.init()' to avoid 'Font not Initialized' error
+
 myfont = pygame.font.SysFont("monospace", 15)
-
-
-
 
 while not done:
 
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            done = True
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
-            dYchange = dYchange - 0.05
-            print(dYchange)
-        elif event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
-            dYchange = dYchange + 0.05
-            print(dYchange)
-    screen.fill(RED)
-    # render text
-    label = myfont.render("Use up and down arrows to control the bounce", True, (255, 255, 0))
-    screen.blit(label, (10, 10))
-    dY = dY * 0.98
-    dY = dY + dYchange
-    # add ing this to github hopefully
-    circleY = circleY + dY
-    circleX = circleX + dX
-    if circleY + dY > 500 or circleY < 0:
-        dY = -dY
+	for event in pygame.event.get():
+		if event.type == pygame.QUIT:
+			done = True
+		elif event.type == pygame.KEYDOWN and event.key == pygame.K_UP:
+			ball.dYchange = ball.dYchange - 0.05
 
-    if circleX + dX > 500 or circleX < 0:
-        dX = -dX
-    # print(dY, circleY)
-    pygame.draw.circle(screen,(255,255,0),[circleX,circleY],10)
-    pygame.display.flip()
-    clock.tick(20)
+		elif event.type == pygame.KEYDOWN and event.key == pygame.K_DOWN:
+			ball.dYchange = ball.dYchange + 0.05
+
+	screen.fill(RED)
+	# render text
+	label = myfont.render("Use up and down arrows to control the bounce", True, (255, 255, 0))
+	screen.blit(label, (10, 10))
+	# print(dY, circleY)
+	ball.move()
+	ball.draw()
+
+
+	pygame.display.flip()
+	clock.tick(20)
 pygame.quit()
